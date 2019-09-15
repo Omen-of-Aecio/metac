@@ -1,8 +1,13 @@
 [package]
 name = "metac"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Kevin Robert Stravers <macocio@gmail.com>"]
 edition = "2018"
+description = "Parser for a lisp/bash-like language"
+license = "LGPL-3.0-or-later"
+keywords = ["language", "parser", "interpreter"]
+homepage = "https://docs.rs/metac"
+repository = "https://github.com/Omen-of-Aecio/metac"
 
 [lib]
 name = "metac"
