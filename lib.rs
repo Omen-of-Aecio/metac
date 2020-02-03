@@ -67,7 +67,7 @@
 //! implementer.
 //!
 //! # Multiline Support #
-//! Because this is a sh-like language, it's quite line oriented by nature. Feeding "a b c\nd e f" into
+//! Because this is a shell-like language, it's quite line oriented by nature. Feeding "a b c\nd e f" into
 //! the interpreter will separately interpret each line.
 //!
 //! However, it is sometimes very desirable to write code on multiple lines. The only way to do
