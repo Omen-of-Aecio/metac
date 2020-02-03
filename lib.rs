@@ -12,7 +12,7 @@
 //!                     Data::Atom(string) => {}
 //!                     Data::Command(command_string) => {}
 //!                 }
-//!                 println!["{:?}", part];
+//!                 println!("{:?}", part);
 //!             }
 //!         }
 //!     }
@@ -64,7 +64,7 @@
 //!
 //!     let mut eval = Eval { hashmap: HashMap::new() };
 //!     eval.register("my-variable", "my-value");
-//!     assert_eq!["my-value", eval.interpret_single("Get my-variable").unwrap()];
+//!     assert_eq!("my-value", eval.interpret_single("Get my-variable").unwrap());
 //! }
 //! ```
 //! From here we can set up a more complex environment, callbacks, etc. It's all up to the
@@ -88,16 +88,16 @@
 //!
 //!     let mut eval = Eval { };
 //!
-//!     assert_eq![5, eval.interpret_single("This is\na single statement").unwrap()];
+//!     assert_eq!(5, eval.interpret_single("This is\na single statement").unwrap());
 //!
 //!     // Note: The return value is the result of interpreting the last statement, which is why
 //!     // it returns 3 instead of 2 (the first statement) or 5 (the sum).
-//!     assert_eq![3, eval.interpret_multiple("Here are\ntwo unrelated statements").unwrap()];
-//!     assert_eq![5, eval.interpret_single("Here are\ntwo related statements").unwrap()];
+//!     assert_eq!(3, eval.interpret_multiple("Here are\ntwo unrelated statements").unwrap());
+//!     assert_eq!(5, eval.interpret_single("Here are\ntwo related statements").unwrap());
 //!
 //!     // Because the "\n" was present during an opening parenthesis, both lines are considered
 //!     // part of the same statement, hence 5 elements in this statement.
-//!     assert_eq![5, eval.interpret_multiple("This is (\na) single statement").unwrap()];
+//!     assert_eq!(5, eval.interpret_multiple("This is (\na) single statement").unwrap());
 //! }
 //! ```
 #![deny(
@@ -330,9 +330,9 @@ mod tests {
     fn empty_parse() {
         let line = "";
         let mut data = SVec::<Data>::new();
-        assert_eq![Err(ParseError::NothingToParse), parse(line, &mut data)];
+        assert_eq!(Err(ParseError::NothingToParse), parse(line, &mut data));
 
-        assert_eq![true, data.is_empty()];
+        assert_eq!(true, data.is_empty());
     }
 
     #[test]
@@ -341,11 +341,11 @@ mod tests {
         let mut data = SVec::<Data>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![4, data.len()];
-        assert_eq![Data::Atom("Set"), data[0]];
-        assert_eq![Data::Atom("Log"), data[1]];
-        assert_eq![Data::Atom("Level"), data[2]];
-        assert_eq![Data::Atom("0"), data[3]];
+        assert_eq!(4, data.len());
+        assert_eq!(Data::Atom("Set"), data[0]);
+        assert_eq!(Data::Atom("Log"), data[1]);
+        assert_eq!(Data::Atom("Level"), data[2]);
+        assert_eq!(Data::Atom("0"), data[3]);
     }
 
     #[test]
@@ -354,11 +354,11 @@ mod tests {
         let mut data = SVec::<Data>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![4, data.len()];
-        assert_eq![Data::Atom("Set"), data[0]];
-        assert_eq![Data::Atom("Log"), data[1]];
-        assert_eq![Data::Atom("Level"), data[2]];
-        assert_eq![Data::Command(" 0"), data[3]];
+        assert_eq!(4, data.len());
+        assert_eq!(Data::Atom("Set"), data[0]);
+        assert_eq!(Data::Atom("Log"), data[1]);
+        assert_eq!(Data::Atom("Level"), data[2]);
+        assert_eq!(Data::Command(" 0"), data[3]);
     }
 
     #[test]
@@ -367,7 +367,7 @@ mod tests {
         let mut data = SVec::<Data>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![1, data.len()];
+        assert_eq!(1, data.len());
     }
 
     #[test]
@@ -376,8 +376,8 @@ mod tests {
         let mut data = SVec::<Data>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![1, data.len()];
-        assert_eq![Data::Command(""), data[0]];
+        assert_eq!(1, data.len());
+        assert_eq!(Data::Command(""), data[0]);
     }
 
     #[test]
@@ -386,8 +386,8 @@ mod tests {
         let mut data = SVec::<Data>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![1, data.len()];
-        assert_eq![Data::Command("()"), data[0]];
+        assert_eq!(1, data.len());
+        assert_eq!(Data::Command("()"), data[0]);
     }
 
     #[test]
@@ -396,9 +396,9 @@ mod tests {
         let mut data = SVec::<Data>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![2, data.len()];
-        assert_eq![Data::Command("()"), data[0]];
-        assert_eq![Data::Command(""), data[1]];
+        assert_eq!(2, data.len());
+        assert_eq!(Data::Command("()"), data[0]);
+        assert_eq!(Data::Command(""), data[1]);
     }
 
     #[test]
@@ -407,11 +407,11 @@ mod tests {
         let mut data = SVec::<Data>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![4, data.len()];
-        assert_eq![Data::Atom("Set"), data[0]];
-        assert_eq![Data::Atom("Log"), data[1]];
-        assert_eq![Data::Atom("Level"), data[2]];
-        assert_eq![Data::Command("Get Log Level"), data[3]];
+        assert_eq!(4, data.len());
+        assert_eq!(Data::Atom("Set"), data[0]);
+        assert_eq!(Data::Atom("Log"), data[1]);
+        assert_eq!(Data::Atom("Level"), data[2]);
+        assert_eq!(Data::Command("Get Log Level"), data[3]);
     }
 
     #[test]
@@ -420,18 +420,18 @@ mod tests {
         let mut data = SVec::<Data>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![4, data.len()];
-        assert_eq![Data::Atom("Set"), data[0]];
-        assert_eq![Data::Atom("Log"), data[1]];
-        assert_eq![Data::Atom("Level"), data[2]];
-        assert_eq![Data::Command("\n\tGet Logger Levels\n"), data[3]];
+        assert_eq!(4, data.len());
+        assert_eq!(Data::Atom("Set"), data[0]);
+        assert_eq!(Data::Atom("Log"), data[1]);
+        assert_eq!(Data::Atom("Level"), data[2]);
+        assert_eq!(Data::Command("\n\tGet Logger Levels\n"), data[3]);
 
         let mut new_data = SVec::<Data>::new();
         parse(data[3].content(), &mut new_data).unwrap();
-        assert_eq![3, new_data.len()];
-        assert_eq![Data::Atom("Get"), new_data[0]];
-        assert_eq![Data::Atom("Logger"), new_data[1]];
-        assert_eq![Data::Atom("Levels"), new_data[2]];
+        assert_eq!(3, new_data.len());
+        assert_eq!(Data::Atom("Get"), new_data[0]);
+        assert_eq!(Data::Atom("Logger"), new_data[1]);
+        assert_eq!(Data::Atom("Levels"), new_data[2]);
     }
 
     // ---
@@ -447,20 +447,20 @@ mod tests {
     fn fail_parse_closing_parenthesis() {
         let line = "command ) will not work";
         let mut data = SVec::<_>::new();
-        assert_eq![
+        assert_eq!(
             ParseError::PrematureRightParenthesis,
             parse(line, &mut data).unwrap_err()
-        ];
+        );
     }
 
     #[test]
     fn fail_parse_dangling_open_parenthesis() {
         let line = "command ( will not work";
         let mut data = SVec::<_>::new();
-        assert_eq![
+        assert_eq!(
             ParseError::DanglingLeftParenthesis,
             parse(line, &mut data).unwrap_err()
-        ];
+        );
     }
 
     #[test]
@@ -469,8 +469,8 @@ mod tests {
         let mut data = SVec::<_>::new();
         parse(line, &mut data).unwrap();
 
-        assert_eq![2, data.len()];
-        assert_eq![&[Data::Atom("call"), Data::Command("call")], &data[0..2]];
+        assert_eq!(2, data.len());
+        assert_eq!(&[Data::Atom("call"), Data::Command("call")], &data[0..2]);
     }
 
     // ---
@@ -488,10 +488,10 @@ mod tests {
         let mut eval = Eval { invoked: 0 };
 
         let line = "";
-        assert_eq![Err(ParseError::NothingToParse), eval.interpret_single(line)];
-        assert_eq![0, eval.invoked];
+        assert_eq!(Err(ParseError::NothingToParse), eval.interpret_single(line));
+        assert_eq!(0, eval.invoked);
         eval.interpret_multiple("command").unwrap();
-        assert_eq![1, eval.invoked];
+        assert_eq!(1, eval.invoked);
     }
 
     #[test]
@@ -507,15 +507,15 @@ mod tests {
         let mut eval = Eval { invoked: 0 };
 
         let line = " ";
-        assert_eq![Err(ParseError::NothingToParse), eval.interpret_single(line)];
-        assert_eq![
+        assert_eq!(Err(ParseError::NothingToParse), eval.interpret_single(line));
+        assert_eq!(
             Err(ParseError::NothingToParse),
             eval.interpret_multiple(line)
-        ];
-        assert_eq![
+        );
+        assert_eq!(
             Err(ParseError::NothingToParse),
             eval.interpret_multiple(" \n")
-        ];
+        );
     }
 
     #[test]
@@ -533,7 +533,7 @@ mod tests {
         let line = "2";
         eval.interpret_single(line).unwrap();
         eval.interpret_multiple(line).unwrap();
-        assert_eq![2, eval.invoked];
+        assert_eq!(2, eval.invoked);
     }
 
     #[test]
@@ -550,7 +550,7 @@ mod tests {
 
         eval.interpret_multiple("X\nY\nZ\nW (\n\t1 2 3\n) W-1\nQ")
             .unwrap();
-        assert_eq![5, eval.invoked];
+        assert_eq!(5, eval.invoked);
     }
 
     #[test]
@@ -563,17 +563,17 @@ mod tests {
                 self.invoked += 1;
                 match self.invoked {
                     1 => {
-                        assert_eq![
+                        assert_eq!(
                             &[
                                 Data::Atom("Lorem"),
                                 Data::Atom("ipsum"),
                                 Data::Command("\n\tdolor sit amet\n\tX\n")
                             ],
                             commands
-                        ];
+                        );
                     }
                     2 => {
-                        assert_eq![
+                        assert_eq!(
                             &[
                                 Data::Atom("dolor"),
                                 Data::Atom("sit"),
@@ -581,10 +581,10 @@ mod tests {
                                 Data::Atom("X")
                             ],
                             commands
-                        ];
+                        );
                     }
                     3 => {
-                        assert_eq![&[Data::Atom("Singular")], commands];
+                        assert_eq!(&[Data::Atom("Singular")], commands);
                     }
                     _ => assert![false],
                 }
@@ -602,7 +602,7 @@ mod tests {
 
         eval.interpret_multiple("Lorem ipsum (\n\tdolor sit amet\n\tX\n)\nSingular")
             .unwrap();
-        assert_eq![3, eval.invoked];
+        assert_eq!(3, eval.invoked);
     }
 
     #[test]
@@ -617,10 +617,10 @@ mod tests {
         }
         let mut eval = Eval { invoked: 0 };
         eval.interpret_single("Hello World").unwrap();
-        assert_eq![1, eval.invoked];
+        assert_eq!(1, eval.invoked);
         eval.interpret_single("This is an example (command)")
             .unwrap();
-        assert_eq![2, eval.invoked];
+        assert_eq!(2, eval.invoked);
     }
 
     #[test]
@@ -643,20 +643,20 @@ mod tests {
         }
         let mut eval = Eval { invoked: 0 };
         eval.interpret_single("Hello World").unwrap();
-        assert_eq![1, eval.invoked];
+        assert_eq!(1, eval.invoked);
         eval.interpret_single("This is an example of substitution: (command)")
             .unwrap();
-        assert_eq![3, eval.invoked];
+        assert_eq!(3, eval.invoked);
         eval.interpret_single(
             "We can substitute more than once: (my command), anywhere: (another command here)",
         )
         .unwrap();
-        assert_eq![6, eval.invoked];
+        assert_eq!(6, eval.invoked);
         eval.interpret_single("We can also nest substitutions: (my (recursive (command) here))")
             .unwrap();
-        assert_eq![10, eval.invoked];
+        assert_eq!(10, eval.invoked);
         eval.interpret_single("a (\n\tb c\n)").unwrap();
-        assert_eq![12, eval.invoked];
+        assert_eq!(12, eval.invoked);
     }
 
     // ---
@@ -665,98 +665,98 @@ mod tests {
     fn partial_parse_single_line() {
         let mut part = PartialParse::default();
         for ch in "hello world".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Ready, part.parse_increment(b'\n')];
+        assert_eq!(PartialParseOp::Ready, part.parse_increment(b'\n'));
     }
 
     #[test]
     fn partial_parse_multi_line() {
         let mut part = PartialParse::default();
         for ch in "hello world (".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b'\n')];
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b'\n'));
 
         for ch in "this is a message".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b'\n')];
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b')')];
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b'\n'));
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b')'));
 
         for ch in "last few words".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Ready, part.parse_increment(b'\n')];
+        assert_eq!(PartialParseOp::Ready, part.parse_increment(b'\n'));
     }
 
     #[test]
     fn partial_parse_multi_line_nested() {
         let mut part = PartialParse::default();
         for ch in "hello world (".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b'\n')];
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b'\n'));
 
         for ch in "this) (is (a message".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b'\n')];
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b')')];
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b'\n'));
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b')'));
 
         for ch in "last few words".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b'\n')];
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b')')];
-        assert_eq![PartialParseOp::Ready, part.parse_increment(b'\n')];
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b'\n'));
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b')'));
+        assert_eq!(PartialParseOp::Ready, part.parse_increment(b'\n'));
     }
 
     #[test]
     fn partial_parse_error() {
         let mut part = PartialParse::default();
         for ch in "hello world".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b')')];
-        assert_eq![PartialParseOp::Ready, part.parse_increment(b'\n')];
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b')'));
+        assert_eq!(PartialParseOp::Ready, part.parse_increment(b'\n'));
     }
 
     #[test]
     fn partial_parse_error_complex() {
         let mut part = PartialParse::default();
         for ch in "hello world (\na b c) d ".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b')')];
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b')'));
         for ch in "opener (\na b c d\ne f".bytes() {
-            assert_eq![PartialParseOp::Discard, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Discard, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b')')];
-        assert_eq![PartialParseOp::Ready, part.parse_increment(b'\n')];
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b')'));
+        assert_eq!(PartialParseOp::Ready, part.parse_increment(b'\n'));
     }
 
     #[test]
     fn premature_right_parentheses_discards_entire_line() {
         let mut part = PartialParse::default();
         for ch in "hello world (\na b c) d ".bytes() {
-            assert_eq![PartialParseOp::Unready, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Unready, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b')')];
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b')'));
         for ch in "opener (\na b c d\ne f".bytes() {
-            assert_eq![PartialParseOp::Discard, part.parse_increment(ch)];
+            assert_eq!(PartialParseOp::Discard, part.parse_increment(ch));
         }
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b'\n')];
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b'a')];
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b'(')];
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b'\n')];
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b'x')];
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b'\n')];
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b'd')];
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b')')];
-        assert_eq![PartialParseOp::Discard, part.parse_increment(b')')];
-        assert_eq![PartialParseOp::Ready, part.parse_increment(b'\n')];
-        assert_eq![PartialParseOp::Unready, part.parse_increment(b'x')];
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b'\n'));
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b'a'));
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b'('));
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b'\n'));
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b'x'));
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b'\n'));
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b'd'));
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b')'));
+        assert_eq!(PartialParseOp::Discard, part.parse_increment(b')'));
+        assert_eq!(PartialParseOp::Ready, part.parse_increment(b'\n'));
+        assert_eq!(PartialParseOp::Unready, part.parse_increment(b'x'));
     }
 
     // ---
@@ -845,7 +845,7 @@ mod tests {
             for _ in black_box(line).chars() {
                 count += 1;
             }
-            assert_eq![223, count];
+            assert_eq!(223, count);
         });
     }
 }
