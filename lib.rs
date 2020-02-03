@@ -3,23 +3,21 @@
 //! Here's an example:
 //! ```
 //! use metac::{Data, Evaluate};
-//! fn main() {
-//!     struct Eval { }
-//!     impl Evaluate<()> for Eval {
-//!         fn evaluate(&mut self, statement: &[Data]) -> () {
-//!             for part in statement {
-//!                 match part {
-//!                     Data::Atom(string) => {}
-//!                     Data::Command(command_string) => {}
-//!                 }
-//!                 println!("{:?}", part);
+//! struct Eval { }
+//! impl Evaluate<()> for Eval {
+//!     fn evaluate(&mut self, statement: &[Data]) -> () {
+//!         for part in statement {
+//!             match part {
+//!                 Data::Atom(string) => {}
+//!                 Data::Command(command_string) => {}
 //!             }
+//!             println!("{:?}", part);
 //!         }
 //!     }
-//!
-//!     let mut eval = Eval { };
-//!     eval.interpret_single("Hello (World 1 2) 3").unwrap();
 //! }
+//!
+//! let mut eval = Eval { };
+//! eval.interpret_single("Hello (World 1 2) 3").unwrap();
 //! ```
 //!
 //! All you need to do is implement trait `Evaluate` on a structure, then, you call `interpret`
@@ -40,32 +38,30 @@
 //! ```
 //! use metac::{Data, Evaluate};
 //! use std::collections::HashMap;
-//! fn main() {
-//!     struct Eval {
-//!         hashmap: HashMap<String, String>,
+//! struct Eval {
+//!     hashmap: HashMap<String, String>,
+//! }
+//! impl Eval {
+//!     fn register(&mut self, key: &str, value: &str) {
+//!         self.hashmap.insert(key.into(), value.into());
 //!     }
-//!     impl Eval {
-//!         fn register(&mut self, key: &str, value: &str) {
-//!             self.hashmap.insert(key.into(), value.into());
-//!         }
-//!     }
-//!     impl Evaluate<String> for Eval {
-//!         fn evaluate(&mut self, statement: &[Data]) -> String {
-//!             if statement.len() == 2 {
-//!                 if let Data::Atom("Get") = statement[0] {
-//!                     if let Data::Atom(key) = statement[1] {
-//!                         return self.hashmap.get(key).unwrap().clone();
-//!                     }
+//! }
+//! impl Evaluate<String> for Eval {
+//!     fn evaluate(&mut self, statement: &[Data]) -> String {
+//!         if statement.len() == 2 {
+//!             if let Data::Atom("Get") = statement[0] {
+//!                 if let Data::Atom(key) = statement[1] {
+//!                     return self.hashmap.get(key).unwrap().clone();
 //!                 }
 //!             }
-//!             "".into()
 //!         }
+//!         "".into()
 //!     }
-//!
-//!     let mut eval = Eval { hashmap: HashMap::new() };
-//!     eval.register("my-variable", "my-value");
-//!     assert_eq!("my-value", eval.interpret_single("Get my-variable").unwrap());
 //! }
+//!
+//! let mut eval = Eval { hashmap: HashMap::new() };
+//! eval.register("my-variable", "my-value");
+//! assert_eq!("my-value", eval.interpret_single("Get my-variable").unwrap());
 //! ```
 //! From here we can set up a more complex environment, callbacks, etc. It's all up to the
 //! implementer.
@@ -78,27 +74,25 @@
 //! this in metac is by using parentheses or `interpret_single`:
 //! ```
 //! use metac::{Data, Evaluate};
-//! fn main() {
-//!     struct Eval { }
-//!     impl Evaluate<usize> for Eval {
-//!         fn evaluate(&mut self, statement: &[Data]) -> usize {
-//!             statement.len()
-//!         }
+//! struct Eval { }
+//! impl Evaluate<usize> for Eval {
+//!     fn evaluate(&mut self, statement: &[Data]) -> usize {
+//!         statement.len()
 //!     }
-//!
-//!     let mut eval = Eval { };
-//!
-//!     assert_eq!(5, eval.interpret_single("This is\na single statement").unwrap());
-//!
-//!     // Note: The return value is the result of interpreting the last statement, which is why
-//!     // it returns 3 instead of 2 (the first statement) or 5 (the sum).
-//!     assert_eq!(3, eval.interpret_multiple("Here are\ntwo unrelated statements").unwrap());
-//!     assert_eq!(5, eval.interpret_single("Here are\ntwo related statements").unwrap());
-//!
-//!     // Because the "\n" was present during an opening parenthesis, both lines are considered
-//!     // part of the same statement, hence 5 elements in this statement.
-//!     assert_eq!(5, eval.interpret_multiple("This is (\na) single statement").unwrap());
 //! }
+//!
+//! let mut eval = Eval { };
+//!
+//! assert_eq!(5, eval.interpret_single("This is\na single statement").unwrap());
+//!
+//! // Note: The return value is the result of interpreting the last statement, which is why
+//! // it returns 3 instead of 2 (the first statement) or 5 (the sum).
+//! assert_eq!(3, eval.interpret_multiple("Here are\ntwo unrelated statements").unwrap());
+//! assert_eq!(5, eval.interpret_single("Here are\ntwo related statements").unwrap());
+//!
+//! // Because the "\n" was present during an opening parenthesis, both lines are considered
+//! // part of the same statement, hence 5 elements in this statement.
+//! assert_eq!(5, eval.interpret_multiple("This is (\na) single statement").unwrap());
 //! ```
 #![deny(
     missing_docs,
